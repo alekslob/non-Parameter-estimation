@@ -24,7 +24,7 @@ def func(x, i):
     s = float(vs.get())
     m = float(vm.get())
     c = 0 #m - 4*s
-    d = 20 #m + 4*s
+    d = 8 #m + 4*s
     if i == 1:
         p = 1/mth.sqrt(d-c)
     elif mth.trunc(i/2) == i/2:
@@ -35,6 +35,7 @@ def func(x, i):
 
 def X2(N, F_teor, F, m, s):
     k = int(1 + mth.log2(N))
+    insertval("\n %d\n" %k)
     n = N/k
     X = []
     x = []
@@ -53,14 +54,14 @@ def func_teor(T, N,m,s):
     # return [mth.exp(-((2*T*(i - N/2)/N)**2)/(2*s*s))/(s*mth.sqrt(2*pi)) for i in range(N+1)]
 
     # экспоненциальное
-    # lam = 0.5
-    # return [lam*mth.exp(-lam*(2*T*(i)/N)) for i in range(N+1)]
+    lam = 0.5
+    return [lam*mth.exp(-lam*(2*T*(i)/N)) for i in range(N+1)]
 
     # гамма
-    alf = 1/2
-    k = 2
-    # return [(alf**k)*((2*T*i/N)**(k-1))*mth.exp(-alf*(2*T*i/N))/mth.gamma(k) for i in range(N+1)]
-    return [((2*T*i/N)**(k-1))*mth.exp(-(2*T*i/N)*alf)*(alf**k)/mth.gamma(k) for i in range(N+1)]
+    # alf = m/s
+    # k = m*m/s
+    # # return [(alf**k)*((2*T*i/N)**(k-1))*mth.exp(-alf*(2*T*i/N))/mth.gamma(k) for i in range(N+1)]
+    # return [((2*T*i/N)**(k-1))*mth.exp(-(2*T*i/N)*alf)*(alf**k)/mth.gamma(k) for i in range(N+1)]
     # return [(2*T*i/N)*0.25*mth.exp(-0.5*(2*T*i/N)) for i in range(N+1)]
     # return [((2*T*i/N)**(k-1))*mth.exp(-(2*T*i/N)/tet)/((tet**k)*mth.gamma(k)) for i in range(N+1)]
 
@@ -79,12 +80,12 @@ def creater():
 
     # s = float(vs.get())
     # m = float(vm.get())
-    s = 1
-    m = 0
+    s = 2
+    m = 4
 
     # x = [rnd.normalvariate(m,s) for i in range(N_point + 1)] #нормальное
-    # x = [rnd.expovariate(0.5) for i in range(N_point + 1)] #экспоненциальное
-    x = [rnd.gammavariate(2, 2) for i in range(N_point + 1)]
+    x = [rnd.expovariate(0.5) for i in range(N_point + 1)] #экспоненциальное
+    # x = [rnd.gammavariate(9, 1/2) for i in range(N_point + 1)]
     # x = [rnd.betavariate(2,2) for i in range(N_point + 1)]
     X_nor = sorted(x)
     if ident == 0:
@@ -98,11 +99,12 @@ def creater():
             insertval("Необходимо установить параметры окна")
 
 def DPF(X_nor, N_point, K_member, m, s):
-    T = 10*s
+    # T = 4*s
+    T = 4
     N = 100
     F_teor = func_teor(T, N, m, s)
     # X_itog = [2*T*((i - N/2)/N) + m for i in range(N+1)]  #нормальное
-    X_itog = [2*T*((i)/N) + m for i in range(N+1)]  #экспоненциальное
+    X_itog = [2*T*((i)/N) for i in range(N+1)]  #экспоненциальное
 
     F = [0]*(N+1)
     start_itme = time.time()
@@ -127,16 +129,19 @@ def DPF(X_nor, N_point, K_member, m, s):
     
     
     # labstr = 'N('+str(m)+','+str(s)+')'
-    # plt.figure()
-    # plt.grid()
-    # plt.plot(X_itog, F_teor, linestyle = '--', linewidth = 2, color = 'black', label=labstr)
-    # plt.plot(X_itog, F, label = 'f(x)')
-    # plt.legend()
-    # plt.show()
+    # labstr = 'Г('+str(m/s)+','+str(m*m/s)+')'
+    labstr = 'Exp('+str(1/2)+')'
+    plt.figure()
+    plt.grid()
+    plt.plot(X_itog, F_teor, linestyle = '--', linewidth = 2, color = 'black', label=labstr)
+    plt.plot(X_itog, F, label = 'f(x)')
+    plt.legend()
+    plt.show()
     return F 
 
 def BPF(X_nor, N_point, K_member, m, s):
-    T = 10*s
+    # T = 10*s
+    T = s
     N = 100
     F_teor = func_teor(T, N, m, s)
     # X_itog = [2*T*((i - N/2)/N) + m for i in range(N+1)]
@@ -163,13 +168,13 @@ def BPF(X_nor, N_point, K_member, m, s):
     # insertval("X2 = %3f \n" % X2(N, F_teor, F, m, s))
     # insertval("Время работы = %3f \n" % time_RES)
 
-    # labstr = 'N('+str(m)+','+str(s)+')'
-    # plt.figure()
-    # plt.grid()
-    # plt.plot(X_itog, F_teor, linestyle = '--', linewidth = 2, color = 'black', label=labstr)
-    # plt.plot(X_itog, F, label = 'f(x)')
-    # plt.legend()
-    # plt.show()
+    labstr = 'N('+str(m)+','+str(s)+')'
+    plt.figure()
+    plt.grid()
+    plt.plot(X_itog, F_teor, linestyle = '--', linewidth = 2, color = 'black', label=labstr)
+    plt.plot(X_itog, F, label = 'f(x)')
+    plt.legend()
+    plt.show()
     return F 
 
 def proc(X_itog, X_nor, N_point, K_member, S_wind, t, ident, conn):
