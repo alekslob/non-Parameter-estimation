@@ -39,8 +39,6 @@ def getDensityFunction():
     fourierTransform = FourierTransform(randomVariables,
                                         nPoint,
                                         kMember,
-                                        expectation,
-                                        variance,
                                         start,
                                         end)
     if chooseFourierTransform == 0:
@@ -84,7 +82,6 @@ def getTeoreticalFunction():
     end = 4
 
     teoreticalFunctions = TeoreticalFunctions(end-start,
-                                            nPoint,
                                             expectation,
                                             variance)
     if chooseDistribution == 0:

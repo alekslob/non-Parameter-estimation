@@ -6,11 +6,10 @@ import math as mth
 class TeoreticalFunctions(object):
     def __init__(self,
                 width, 
-                nPoint, 
                 expectation, 
                 variance):
         self.width = width
-        self.nPoint = nPoint
+        self.nPoint = 100
         self.expectation = expectation
         self.variance = variance
         self.lambd = 0.5 
