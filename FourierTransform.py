@@ -23,10 +23,11 @@ class FourierTransform(object):
 
     def discreteFourierTransform(self):
         F = [0]*(self.N + 1)
-        for f, sV in zip(F, self.scopeOfView):
-            for i in range(self.kMember):
+        for j in range(self.N + 1):
+        # for f, sV in zip(F, self.scopeOfView):
+            for i in range(self.kMember + 1):
                 coefficientOfDecomposition = self.coefficientOfDecompositionDFT(i)
-                f += coefficientOfDecomposition * self.densityFunction(sV, i)
+                F[j] += coefficientOfDecomposition * self.densityFunction(self.scopeOfView[j], i)
         return F
 
     def coefficientOfDecompositionDFT(self, i):
@@ -34,10 +35,11 @@ class FourierTransform(object):
 
     def fastFourierTransform(self):
         F = [0]*(self.N + 1)
-        for f, sv in zip(F, self.scopeOfView):
+        for j in range(self.N + 1):
+        # for f, sv in zip(F, self.scopeOfView):
             for i in range(self.kMember):
                 coefficientOfDecomposition = self.coefficientOfDecompositionFFT(i)
-                f += 2*coefficientOfDecomposition*self.densityFunction(sv, i)
+                F[j] += coefficientOfDecomposition * self.densityFunction(self.scopeOfView[j], i)
         return F
     
     def coefficientOfDecompositionFFT(self, i):

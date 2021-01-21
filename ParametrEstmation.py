@@ -20,7 +20,7 @@ def insertval(value):
 
 def creater():
     evalution = getDensityFunction()
-    outputOfResults(evalution)
+    insertval(outputOfResults(evalution))
     # showDensityFunction(evalution)
 
 def getDensityFunction():
@@ -32,7 +32,7 @@ def getDensityFunction():
     # S_wind = int(vSw.get())
     expectation = 0
     variance = 1
-    start = -4
+    start = 0
     end = 4
     
     randomVariables = getRandomVariables()
@@ -49,17 +49,17 @@ def getDensityFunction():
         return fourierTransform.windowFourierTransform()
 
 def getRandomVariables():
-    chooseDistribution = 0 #!!!!!
+    # chooseDistribution = 0 #!!!!!
     nPoint = int(sampleSize.get())
     expectation = 0
     variance = 1
 
     randomVariables = RandomVariables(nPoint, expectation, variance)
-    if chooseDistribution == 0:
+    if chooseDistribution.current() == 0:
         return randomVariables.normal()
-    elif chooseDistribution == 1:
-        return randomVariables.expectation()
-    elif chooseDistribution == 2:
+    elif chooseDistribution.current() == 1:
+        return randomVariables.exponential()
+    elif chooseDistribution.current() == 2:
         return randomVariables.gamma()
 
 def outputOfResults(evalution):
@@ -68,13 +68,15 @@ def outputOfResults(evalution):
     variance = 1
 
     deviation = CulcResults.culcDevation(teoreticalFunctions, evalution)
-    insertval(" %3f |" % CulcResults.culcX2(teoreticalFunctions, evalution, expectation, variance))
-    insertval(" %3f    |" % deviation)
+    X2 = CulcResults.culcX2(teoreticalFunctions, evalution, expectation, variance)
+    # insertval(" %3f |" % X2)
+    # insertval(" %3f    |" % deviation)
+    return '    {:3f}   | {:3f} \n'.format(X2, deviation)
 
 
 
 def getTeoreticalFunction():
-    chooseDistribution = 0 #!!!!!
+    # chooseDistribution = 0 #!!!!!
     nPoint = int(sampleSize.get())
     expectation = 0
     variance = 1
@@ -84,12 +86,12 @@ def getTeoreticalFunction():
     teoreticalFunctions = TeoreticalFunctions(end-start,
                                             expectation,
                                             variance)
-    if chooseDistribution == 0:
-        return teoreticalFunctions.normal
-    elif chooseDistribution == 1:
-        return teoreticalFunctions.expectation
-    elif chooseDistribution == 2:
-        return teoreticalFunctions.gamma
+    if chooseDistribution.current() == 0:
+        return teoreticalFunctions.normal()
+    elif chooseDistribution.current() == 1:
+        return teoreticalFunctions.exponential()
+    elif chooseDistribution.current() == 2:
+        return teoreticalFunctions.gamma()
 
 # def showDensityFunction(evalution):
 
@@ -99,11 +101,12 @@ root = Tk()
 frame1 = LabelFrame()
 frame1.grid(column = 1, row = 0, columnspan=1, padx=(10,10), pady=(10,10))
 
-# выбор модели
-Label(frame1, text = "Фурье:" ).grid( column = 1, row = 0, pady = (0, 0), padx=(30, 0))
 
-chooseModel = Combobox(frame1, values=[u"Дискретный", u"Быстрый", u"Прямоугольное окно", u"Окно Ханна", u"Окно Хемминга"])
-chooseModel.set(u"Дискретный")
+# выбор модели
+valuesModel = [u"Дискретный", u"Быстрый", u"Прямоугольное окно", u"Окно Ханна", u"Окно Хемминга"]
+Label(frame1, text = "Фурье:" ).grid( column = 1, row = 0, pady = (0, 0), padx=(30, 0))
+chooseModel = Combobox(frame1, values = valuesModel)
+chooseModel.set(valuesModel[0])
 chooseModel.grid( column = 2, row=0, pady=(10, 0), padx=(5, 0))
 
 # N - количество точек
@@ -120,8 +123,15 @@ Label(frame1, text="Количество членов ряда:").grid(column=1,
 membersOfRow = StringVar()
 membersOfRow.set('10')
 frameMembersOfRow = Entry(frame1, width=23, textvariable = membersOfRow)
-frameMembersOfRow.grid(column = 2, row=2,  padx=(5, 0), pady=(10, 10))
+frameMembersOfRow.grid(column = 2, row=2,  padx=(5, 0), pady=(10, 0))
 # frameMembersOfRow.bind("<FocusIn>", clear)
+
+# распределение
+valuesDistribution = [u"Нормальное распределение", u"Экспоненциальное распределение", u"Гамма-распределение"]
+Label(frame1, text = "Функция распределения: ").grid(column = 1, row = 3, pady = (0, 0), padx = (30, 0))
+chooseDistribution = Combobox(frame1, values = valuesDistribution)
+chooseDistribution.set(valuesDistribution[0])
+chooseDistribution.grid( column = 2, row=3, pady=(10, 0), padx=(5, 0))
 
 frame2 = LabelFrame(text = "Для ОПФ")
 frame2.grid(column = 1, row = 1, columnspan=1,  padx=(10,10), pady=(10,10))
@@ -145,11 +155,12 @@ frameWidthOfWindow.grid(column=2, row=1, padx=(10, 0), pady=(10, 0))
 frame3 = Frame()
 frame3.grid(column = 2, row = 0, columnspan=1, rowspan=2,  padx=(10,10), pady=(10,10))
 
-button = Button(frame3, text="Решить", command = creater())
-button.grid(column = 9,row = 1, padx=(40, 0), pady=(0, 0))
-
-
 output = Text(frame3, bg="white", font="Arial 10", width = 50, height = 12)
 output.grid(column=1, row = 0, columnspan = 10, rowspan=1, padx=(10, 10), pady=(10, 10))
 
+but = Button(frame3, text="Решить", command = creater)
+but.grid(column = 9,row = 1, padx=(40, 0), pady=(0, 0))
+# root.bind('<Return>', createrReturn)
+
 root.mainloop()
+
