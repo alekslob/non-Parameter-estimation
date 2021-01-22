@@ -13,11 +13,6 @@ class TeoreticalFunctions(object):
         self.expectation = expectation
         self.variance = variance
         self.lambd = 0.5 
-
-        # self.normal = self.normalFunction()
-        # self.exponential = self.exponentialFunction()
-        # self.gamma = self.gammaFunction()
-        # self.beta = self.betaFunction()
     
     def getFunction(self, chooseDistribution):
         if chooseDistribution.current() == 0:
