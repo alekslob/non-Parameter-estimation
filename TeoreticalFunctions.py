@@ -19,7 +19,15 @@ class TeoreticalFunctions(object):
         # self.gamma = self.gammaFunction()
         # self.beta = self.betaFunction()
     
-    def normal(self):
+    def getFunction(self, chooseDistribution):
+        if chooseDistribution.current() == 0:
+            return self.normalF()
+        elif chooseDistribution.current() == 1:
+            return self.exponentialF()
+        elif chooseDistribution.current() == 2:
+            return self.gammaF()
+
+    def normalF(self):
         pi = mth.pi
         T = self.width
         N = self.nPoint
@@ -27,16 +35,12 @@ class TeoreticalFunctions(object):
         s = self.variance
         return [mth.exp(-((2*T*(i - N/2)/N)**2)/(2*s*s))/(s*mth.sqrt(2*pi)) for i in range(N+1)]
 
-    def exponential(self):
-        pi = mth.pi
+    def exponentialF(self):
         T = self.width
         N = self.nPoint
-        m = self.expectation
-        s = self.variance
         return [self.lambd*mth.exp(-self.lambd*(2*T*(i)/N)) for i in range(N+1)]
     
-    def gamma(self):
-        pi = mth.pi
+    def gammaF(self):
         T = self.width
         N = self.nPoint
         m = self.expectation
@@ -45,11 +49,9 @@ class TeoreticalFunctions(object):
         k = m*m/s
         return [((2*T*i/N)**(k-1))*mth.exp(-(2*T*i/N)*alf)*(alf**k)/mth.gamma(k) for i in range(N+1)]
 
-    def beta(self):
+    def betaF(self):
         T = self.width
         N = self.nPoint
-        m = self.expectation
-        s = self.variance
         alf = 2
         bet = 2
         return [((2*T*i/N)**(alf-1))*((1-(2*T*i/N))**(bet-1))/mth.beta(alf, bet) for i in range(N+1)]

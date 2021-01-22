@@ -24,14 +24,8 @@ def creater():
     # showDensityFunction(evalution)
 
 def getDensityFunction():
-    chooseFourierTransform = chooseModel.current()
-    
     nPoint = int(sampleSize.get())
     kMember = int(membersOfRow.get())
-    # N_wind = int(vNw.get())
-    # S_wind = int(vSw.get())
-    expectation = 0
-    variance = 1
     start = 0
     end = 4
     
@@ -41,26 +35,16 @@ def getDensityFunction():
                                         kMember,
                                         start,
                                         end)
-    if chooseFourierTransform == 0:
-        return fourierTransform.discreteFourierTransform()
-    elif chooseFourierTransform == 1:
-        return fourierTransform.fastFourierTransform()
-    elif chooseFourierTransform == 2:
-        return fourierTransform.windowFourierTransform()
+    return fourierTransform.getEstmation(chooseModel)
+    
 
 def getRandomVariables():
-    # chooseDistribution = 0 #!!!!!
     nPoint = int(sampleSize.get())
     expectation = 0
     variance = 1
 
     randomVariables = RandomVariables(nPoint, expectation, variance)
-    if chooseDistribution.current() == 0:
-        return randomVariables.normal()
-    elif chooseDistribution.current() == 1:
-        return randomVariables.exponential()
-    elif chooseDistribution.current() == 2:
-        return randomVariables.gamma()
+    return randomVariables.getFunction(chooseDistribution)
 
 def outputOfResults(evalution):
     teoreticalFunctions = getTeoreticalFunction()
@@ -76,8 +60,6 @@ def outputOfResults(evalution):
 
 
 def getTeoreticalFunction():
-    # chooseDistribution = 0 #!!!!!
-    nPoint = int(sampleSize.get())
     expectation = 0
     variance = 1
     start = -4
@@ -86,12 +68,8 @@ def getTeoreticalFunction():
     teoreticalFunctions = TeoreticalFunctions(end-start,
                                             expectation,
                                             variance)
-    if chooseDistribution.current() == 0:
-        return teoreticalFunctions.normal()
-    elif chooseDistribution.current() == 1:
-        return teoreticalFunctions.exponential()
-    elif chooseDistribution.current() == 2:
-        return teoreticalFunctions.gamma()
+    return teoreticalFunctions.getFunction(chooseDistribution)
+    
 
 # def showDensityFunction(evalution):
 

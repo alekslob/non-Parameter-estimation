@@ -21,6 +21,14 @@ class FourierTransform(object):
         self.scopeOfView = [self.c + i/(self.N)*self.d for i in range(self.N + 1)]
         self.randomVariablesFFT = [self.randomVariables[2*i] for i in range(int(len(self.randomVariables)/2))]
 
+    def getEstmation(self, chooseModel):
+        if chooseModel.current() == 0:
+            return self.discreteFourierTransform()
+        elif chooseModel.current() == 1:
+            return self.fastFourierTransform()
+        elif chooseModel.current() == 2:
+            return self.windowFourierTransform()
+            
     def discreteFourierTransform(self):
         F = [0]*(self.N + 1)
         for j in range(self.N + 1):
@@ -45,6 +53,10 @@ class FourierTransform(object):
     def coefficientOfDecompositionFFT(self, i):
         return sum(self.densityFunction(rv, i)/self.nPoint for rv in self.randomVariablesFFT)
 
+    def windowFourierTransform(self):
+        F = [0]*(self.N + 1)
+        return F
+        
     def densityFunction(self, x, smoothingFactor):
         pi = mth.pi
         if smoothingFactor == 1:
@@ -53,3 +65,5 @@ class FourierTransform(object):
             return mth.sqrt(2/(self.d - self.c))*mth.sin(pi*smoothingFactor/2*(x*2/(self.d - self.c) + (self.d + self.c)/(self.d - self.c)))
         else:
             return mth.sqrt(2/(self.d - self.c))*mth.cos(pi*(smoothingFactor - 1)/2*(x*2/(self.d - self.c) + (self.d + self.c)/(self.d - self.c)))
+    
+    

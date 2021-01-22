@@ -14,6 +14,14 @@ class RandomVariables(object):
         # self.gamma = self.gammaRandom()
         # self.beta = self.betaRandom()
 
+    def getFunction(self, chooseDistribution):
+        if chooseDistribution.current() == 0:
+            return self.normal()
+        elif chooseDistribution.current() == 1:
+            return self.exponential()
+        elif chooseDistribution.current() == 2:
+            return self.gamma()
+
     def normal(self):
         return sorted([rnd.normalvariate(self.expectation,self.variance) for i in range(self.nPoint + 1)])
 
