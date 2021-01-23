@@ -9,8 +9,9 @@ class ShowFunction(object):
         self.F = F
         self.fTeor = fTeor
         self.data = data
+        width = viewLimits[1]-viewLimits[0]
         N = len(F)
-        self.scopeOfView = [viewLimits[0] + i/(N)*viewLimits[1] for i in range(N)]
+        self.scopeOfView = [viewLimits[0] + i/(N-1)*width for i in range(N)]
 
 
     def  showFunction(self, chooseDistribution):

@@ -13,14 +13,22 @@ def creater():
 def getDensityFunction():
     nPoint = int(ipe.sampleSize.get())
     kMember = int(ipe.membersOfRow.get())
-    
+    viewLimits = getViewLimits(ipe.chooseDistribution.current())
+
     randomVariables = getRandomVariables()
     fourierTransform = FourierTransform(randomVariables,
                                         nPoint,
                                         kMember,
-                                        ipe.viewLimits)
+                                        viewLimits)
     return fourierTransform.getEstmation(ipe.chooseModel)
     
+def getViewLimits(chooseDistribution):
+    if chooseDistribution == 0:
+        return [-4,4]
+    elif chooseDistribution == 1:
+        return [0, 4]
+    elif chooseDistribution == 2:
+        return [0, 4]
 
 def getRandomVariables():
     nPoint = int(ipe.sampleSize.get())
@@ -35,19 +43,21 @@ def outputOfResults(evalution):
     X2 = CulcResults.culcX2(teoreticalFunctions, evalution)
     # insertval(" %3f |" % X2)
     # insertval(" %3f    |" % deviation)
-    return '    {:3f}   | {:3f} \n'.format(X2, deviation)
+    return '{:3f}   | {:3f} \n'.format(X2, deviation)
 
 
 
 def getTeoreticalFunction():
+    viewLimits = getViewLimits(ipe.chooseDistribution.current())
     teoreticalFunctions = TeoreticalFunctions(ipe.parametrs,
-                                            ipe.viewLimits)
+                                            viewLimits)
     return teoreticalFunctions.getFunction(ipe.chooseDistribution)
     
 
 def showDensityFunction(evalution):
+    viewLimits = getViewLimits(ipe.chooseDistribution.current())
     showFunction = ShowFunction(getTeoreticalFunction(),
                                 evalution,
                                 ipe.parametrs,
-                                ipe.viewLimits)
+                                viewLimits)
     showFunction.showFunction(ipe.chooseDistribution)
