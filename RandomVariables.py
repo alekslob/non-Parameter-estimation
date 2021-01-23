@@ -3,11 +3,11 @@ import random as rnd
 class RandomVariables(object):
     def __init__(self,
                 nPoint,
-                expectation, 
-                variance):
+                parametrs):
         self.nPoint = nPoint
-        self.expectation = expectation
-        self.variance = variance
+        self.expectation = parametrs[0]
+        self.variance = parametrs[1]
+        self.lambd = parametrs[2]
 
         # self.normal = self.normalRandom()
         # self.exponential = self.exponentialRandom()
@@ -26,7 +26,7 @@ class RandomVariables(object):
         return sorted([rnd.normalvariate(self.expectation,self.variance) for i in range(self.nPoint + 1)])
 
     def exponential(self):
-        return sorted([rnd.expovariate(0.5) for i in range(self.nPoint + 1)])
+        return sorted([rnd.expovariate(self.lambd) for i in range(self.nPoint + 1)])
     
     # todo: разобраться с k и alf
     def gamma(self):

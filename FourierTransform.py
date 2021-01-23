@@ -8,17 +8,16 @@ class FourierTransform(object):
                 randomVariables, 
                 nPoint, 
                 kMember, 
-                c, 
-                d):
+                viewLimits):
         self.randomVariables = randomVariables
         self.nPoint = nPoint
         self.kMember = kMember
 
-        self.c = c
-        self.d = d
+        self.c = viewLimits[0]
+        self.d = viewLimits[1]
 
         self.N = 100
-        self.scopeOfView = [self.c + i/(self.N)*self.d for i in range(self.N + 1)]
+        self.scopeOfView = [viewLimits[0] + i/(self.N)*viewLimits[1] for i in range(self.N)]
         self.randomVariablesFFT = [self.randomVariables[2*i] for i in range(int(len(self.randomVariables)/2))]
 
     def getEstmation(self, chooseModel):

@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter.ttk import *
-import ParametrEstmation as pe
+import NonParametrEstmation as pe
+
+parametrs = [0,1,0.5,9,2]
+viewLimits = [-4,4]
 
 def clear(event):
     """ Clears entry form """

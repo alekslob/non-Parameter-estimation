@@ -4,7 +4,7 @@ def culcDevation(fTeor, F):
     N =len(fTeor)
     return mth.sqrt(sum(((f - ft)**2)/N for ft, f in zip(fTeor, F)))
 
-def culcX2(fTeor, F, m, s):
+def culcX2(fTeor, F):
     N = len(F)
     k = int(1 + mth.log2(N))
     n = N/k

@@ -5,14 +5,13 @@ import math as mth
 #       
 class TeoreticalFunctions(object):
     def __init__(self,
-                width, 
-                expectation, 
-                variance):
-        self.width = width
+                parametrs,
+                viewLimits):
+        self.width = viewLimits[1]-viewLimits[0]
         self.nPoint = 100
-        self.expectation = expectation
-        self.variance = variance
-        self.lambd = 0.5 
+        self.expectation = parametrs[0]
+        self.variance = parametrs[1]
+        self.lambd = parametrs[2]
     
     def getFunction(self, chooseDistribution):
         if chooseDistribution.current() == 0:
@@ -44,10 +43,4 @@ class TeoreticalFunctions(object):
         k = m*m/s
         return [((2*T*i/N)**(k-1))*mth.exp(-(2*T*i/N)*alf)*(alf**k)/mth.gamma(k) for i in range(N+1)]
 
-    def betaF(self):
-        T = self.width
-        N = self.nPoint
-        alf = 2
-        bet = 2
-        return [((2*T*i/N)**(alf-1))*((1-(2*T*i/N))**(bet-1))/mth.beta(alf, bet) for i in range(N+1)]
-        
+    
