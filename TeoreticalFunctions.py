@@ -7,7 +7,7 @@ class TeoreticalFunctions(object):
     def __init__(self,
                 parametrs,
                 viewLimits):
-        self.width = viewLimits[1]-viewLimits[0]
+        self.width = (viewLimits[1]-viewLimits[0])/2
         self.nPoint = 100
         self.expectation = parametrs[0]
         self.variance = parametrs[1]
@@ -28,6 +28,7 @@ class TeoreticalFunctions(object):
         m = self.expectation
         s = self.variance
         return [mth.exp(-((2*T*(i - N/2)/N)**2)/(2*s*s))/(s*mth.sqrt(2*pi)) for i in range(N+1)]
+                
 
     def exponentialF(self):
         T = self.width

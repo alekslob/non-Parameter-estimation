@@ -10,6 +10,57 @@ def creater():
     ipe.insertval(outputOfResults(evalution))
     showDensityFunction(evalution)
 
+def createrArticleK():
+    evalutions = []
+    # first
+    ipe.membersOfRow.set('6')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[0]))
+    
+    # second
+    ipe.membersOfRow.set('10')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[1]))
+
+    # third
+    ipe.membersOfRow.set('15')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[2]))
+
+    showDensityFunctionArticle(evalutions)
+
+def createrArticleN():
+    evalutions = []
+    # first
+    ipe.sampleSize.set('100')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[0]))
+    
+    # second
+    ipe.sampleSize.set('500')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[1]))
+
+    # third
+    ipe.sampleSize.set('1000')
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[2]))
+
+    showDensityFunctionArticle(evalutions)
+
+def createrArticleСomparison():
+    evalutions = []
+    ipe.chooseModel.set(ipe.valuesModel[0])
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[0]))
+
+    ipe.chooseModel.set(ipe.valuesModel[1])
+    evalutions.append(getDensityFunction())
+    ipe.insertval(outputOfResults(evalutions[1]))
+
+    showDensityFunctionArticleComparison(evalutions)
+
+
 def getDensityFunction():
     nPoint = int(ipe.sampleSize.get())
     kMember = int(ipe.membersOfRow.get())
@@ -23,8 +74,10 @@ def getDensityFunction():
     return fourierTransform.getEstmation(ipe.chooseModel)
     
 def getViewLimits(chooseDistribution):
+    m = ipe.parametrs[0]
+    s = ipe.parametrs[1]
     if chooseDistribution == 0:
-        return [-4,4]
+        return [m-4*s, m+4*s]
     elif chooseDistribution == 1:
         return [0, 4]
     elif chooseDistribution == 2:
@@ -61,3 +114,19 @@ def showDensityFunction(evalution):
                                 ipe.parametrs,
                                 viewLimits)
     showFunction.showFunction(ipe.chooseDistribution)
+
+def showDensityFunctionArticle(evalutions):
+    viewLimits = getViewLimits(ipe.chooseDistribution.current())
+    showFunction = ShowFunction(getTeoreticalFunction(),
+                                evalutions,
+                                ipe.parametrs,
+                                viewLimits)
+    showFunction.ShowFunctionArticle(ipe.chooseDistribution)
+
+def showDensityFunctionArticleComparison(evalutions):
+    viewLimits = getViewLimits(ipe.chooseDistribution.current())
+    showFunction = ShowFunction(getTeoreticalFunction(),
+                                evalutions,
+                                ipe.parametrs,
+                                viewLimits)
+    showFunction.ShowFunctionArticleComparison(ipe.chooseDistribution)

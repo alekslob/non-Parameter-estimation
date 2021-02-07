@@ -75,8 +75,17 @@ frame3.grid(column = 2, row = 0, columnspan=1, rowspan=2,  padx=(10,10), pady=(1
 output = Text(frame3, bg="white", font="Arial 10", width = 50, height = 12)
 output.grid(column=1, row = 0, columnspan = 10, rowspan=1, padx=(10, 10), pady=(10, 10))
 
-but = Button(frame3, text="Решить", command = pe.creater)
-but.grid(column = 9,row = 1, padx=(40, 0), pady=(0, 0))
+butSimple = Button(frame3, text="Решить", command = pe.creater)
+butSimple.grid(column = 7,row = 1, padx=(40, 0), pady=(0, 0))
+
+butArticleK = Button(frame3, text="СреднийN", command = pe.createrArticleK)
+butArticleK.grid(column = 8,row = 1, padx=(40, 0), pady=(0, 0))
+
+butArticleN = Button(frame3, text="СреднийK", command = pe.createrArticleN)
+butArticleN.grid(column = 9,row = 1, padx=(40, 0), pady=(0, 0))
+
+butArticleСomparison = Button(frame3, text="Сравнение", command = pe.createrArticleСomparison)
+butArticleСomparison.grid(column = 10,row = 1, padx=(40, 0), pady=(0, 0))
 # root.bind('<Return>', createrReturn)
 
 root.mainloop()
