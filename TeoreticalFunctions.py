@@ -14,11 +14,11 @@ class TeoreticalFunctions(object):
         self.lambd = parametrs[2]
     
     def getFunction(self, chooseDistribution):
-        if chooseDistribution.current() == 0:
+        if chooseDistribution == 0:
             return self.normalF()
-        elif chooseDistribution.current() == 1:
+        elif chooseDistribution == 1:
             return self.exponentialF()
-        elif chooseDistribution.current() == 2:
+        elif chooseDistribution == 2:
             return self.gammaF()
 
     def normalF(self):

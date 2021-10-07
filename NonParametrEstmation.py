@@ -2,80 +2,81 @@ from RandomVariables import RandomVariables
 from FourierTransform import FourierTransform
 from TeoreticalFunctions import TeoreticalFunctions
 import CulcResults
-import InterfacePE as ipe
+# import InterfacePE as ipe
 from ShowFunction import ShowFunction 
 
-def creater():
-    evalution = getDensityFunction()
-    ipe.insertval(outputOfResults(evalution))
-    showDensityFunction(evalution)
+valuesModel = [u"Дискретный", u"Быстрый", u"Прямоугольное окно", u"Окно Ханна", u"Окно Хемминга"]
+valuesDistribution = [u"Нормальное распределение", u"Экспоненциальное распределение", u"Гамма-распределение"]
 
-def createrArticleK():
+def creater(sampleSize, membersOfRow, chooseDistribution, chooseModel):
+    evalution = getDensityFunction(sampleSize, membersOfRow, chooseDistribution, chooseModel)
+    # ipe.insertval(outputOfResults(evalution))
+    showDensityFunction(evalution, chooseDistribution)
+    result = outputOfResults(evalution, chooseDistribution)
+    return result
+
+def createrArticleK(sampleSize, membersOfRow, chooseDistribution, chooseModel):
     evalutions = []
     # first
-    ipe.membersOfRow.set('6')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[0]))
+    result = ""
+    i = 0
+    for members in [6, 10, 15]:
+    # membersOfRow = 6
+        evalutions.append(getDensityFunction(sampleSize, members, chooseDistribution, chooseModel))
+        result += "Параметр сглаживания = " + str(members) + "\n" + outputOfResults(evalutions[i], chooseDistribution)
+        i+=1
     
-    # second
-    ipe.membersOfRow.set('10')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[1]))
+    showDensityFunctionArticleK(evalutions, chooseDistribution)
+    return result
 
-    # third
-    ipe.membersOfRow.set('15')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[2]))
-
-    showDensityFunctionArticle(evalutions)
-
-def createrArticleN():
+def createrArticleN(sampleSize, membersOfRow, chooseDistribution, chooseModel):
     evalutions = []
+    result = ""
+    i=0
     # first
-    ipe.sampleSize.set('100')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[0]))
+    for size in [100, 500, 1000]:
+    # ipe.sampleSize.set('100')
+        evalutions.append(getDensityFunction(size, membersOfRow, chooseDistribution, chooseModel))
+        result += "Объем выборки = " + str(size) + "\n" + outputOfResults(evalutions[i], chooseDistribution)
+        i+=1
     
-    # second
-    ipe.sampleSize.set('500')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[1]))
+    showDensityFunctionArticleN(evalutions, chooseDistribution)
+    return result
 
-    # third
-    ipe.sampleSize.set('1000')
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[2]))
-
-    showDensityFunctionArticle(evalutions)
-
-def createrArticleСomparison():
+def createrArticleСomparison(sampleSize, membersOfRow, chooseDistribution, chooseModel):
     evalutions = []
-    ipe.chooseModel.set(ipe.valuesModel[0])
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[0]))
+    result = ""
+    # ipe.chooseModel.set(ipe.valuesModel[0])
+    chm = 0
+    evalutions.append(getDensityFunction(sampleSize, membersOfRow, chooseDistribution, chm))
+    result += str(valuesModel[chm]) + ":\n" + outputOfResults(evalutions[0], chooseDistribution)
 
-    ipe.chooseModel.set(ipe.valuesModel[1])
-    evalutions.append(getDensityFunction())
-    ipe.insertval(outputOfResults(evalutions[1]))
+    # ipe.chooseModel.set(ipe.valuesModel[1])
+    chm = 1
+    evalutions.append(getDensityFunction(sampleSize, membersOfRow, chooseDistribution, chm))
+    result += str(valuesModel[chm]) + ":\n" + outputOfResults(evalutions[1], chooseDistribution)
 
-    showDensityFunctionArticleComparison(evalutions)
+    showDensityFunctionArticleComparison(evalutions, chooseDistribution)
+    return result
 
 
-def getDensityFunction():
-    nPoint = int(ipe.sampleSize.get())
-    kMember = int(ipe.membersOfRow.get())
-    viewLimits = getViewLimits(ipe.chooseDistribution.current())
+def getDensityFunction(sampleSize, membersOfRow, chooseDistribution, chooseModel):
+    nPoint = sampleSize
+    kMember = membersOfRow
+    viewLimits = getViewLimits(chooseDistribution)
 
-    randomVariables = getRandomVariables()
+    randomVariables = getRandomVariables(nPoint, chooseDistribution)
     fourierTransform = FourierTransform(randomVariables,
                                         nPoint,
                                         kMember,
                                         viewLimits)
-    return fourierTransform.getEstmation(ipe.chooseModel)
-    
+    return fourierTransform.getEstmation(chooseModel)
+
+parametrs = [0,1,0.5,9,2]
+
 def getViewLimits(chooseDistribution):
-    m = ipe.parametrs[0]
-    s = ipe.parametrs[1]
+    m = parametrs[0]
+    s = parametrs[1]
     if chooseDistribution == 0:
         return [m-4*s, m+4*s]
     elif chooseDistribution == 1:
@@ -83,50 +84,58 @@ def getViewLimits(chooseDistribution):
     elif chooseDistribution == 2:
         return [0, 4]
 
-def getRandomVariables():
-    nPoint = int(ipe.sampleSize.get())
+def getRandomVariables(nPoint, chooseDistribution):
+    # nPoint = int(ipe.sampleSize.get())
 
-    randomVariables = RandomVariables(nPoint, ipe.parametrs)
-    return randomVariables.getFunction(ipe.chooseDistribution)
+    randomVariables = RandomVariables(nPoint, parametrs)
+    return randomVariables.getFunction(chooseDistribution)
 
-def outputOfResults(evalution):
-    teoreticalFunctions = getTeoreticalFunction()
+def outputOfResults(evalution, chooseDistribution):
+    teoreticalFunctions = getTeoreticalFunction(chooseDistribution)
 
     deviation = CulcResults.culcDevation(teoreticalFunctions, evalution)
     X2 = CulcResults.culcX2(teoreticalFunctions, evalution)
     # insertval(" %3f |" % X2)
     # insertval(" %3f    |" % deviation)
-    return '{:3f}   | {:3f} \n'.format(X2, deviation)
+    return 'X2 = {:3f}   | D = {:3f} \n'.format(X2, deviation)
 
 
 
-def getTeoreticalFunction():
-    viewLimits = getViewLimits(ipe.chooseDistribution.current())
-    teoreticalFunctions = TeoreticalFunctions(ipe.parametrs,
+def getTeoreticalFunction(chooseDistribution):
+    viewLimits = getViewLimits(chooseDistribution)
+    teoreticalFunctions = TeoreticalFunctions(parametrs,
                                             viewLimits)
-    return teoreticalFunctions.getFunction(ipe.chooseDistribution)
+    return teoreticalFunctions.getFunction(chooseDistribution)
     
 
-def showDensityFunction(evalution):
-    viewLimits = getViewLimits(ipe.chooseDistribution.current())
-    showFunction = ShowFunction(getTeoreticalFunction(),
+def showDensityFunction(evalution, chooseDistribution):
+    viewLimits = getViewLimits(chooseDistribution)
+    showFunction = ShowFunction(getTeoreticalFunction(chooseDistribution),
                                 evalution,
-                                ipe.parametrs,
+                                parametrs,
                                 viewLimits)
-    showFunction.showFunction(ipe.chooseDistribution)
+    showFunction.showFunction(chooseDistribution)
 
-def showDensityFunctionArticle(evalutions):
-    viewLimits = getViewLimits(ipe.chooseDistribution.current())
-    showFunction = ShowFunction(getTeoreticalFunction(),
+def showDensityFunctionArticleN(evalutions, chooseDistribution):
+    viewLimits = getViewLimits(chooseDistribution)
+    showFunction = ShowFunction(getTeoreticalFunction(chooseDistribution),
                                 evalutions,
-                                ipe.parametrs,
+                                parametrs,
                                 viewLimits)
-    showFunction.ShowFunctionArticle(ipe.chooseDistribution)
+    showFunction.ShowFunctionArticleN(chooseDistribution)
 
-def showDensityFunctionArticleComparison(evalutions):
-    viewLimits = getViewLimits(ipe.chooseDistribution.current())
-    showFunction = ShowFunction(getTeoreticalFunction(),
+def showDensityFunctionArticleK(evalutions, chooseDistribution):
+    viewLimits = getViewLimits(chooseDistribution)
+    showFunction = ShowFunction(getTeoreticalFunction(chooseDistribution),
                                 evalutions,
-                                ipe.parametrs,
+                                parametrs,
                                 viewLimits)
-    showFunction.ShowFunctionArticleComparison(ipe.chooseDistribution)
+    showFunction.ShowFunctionArticleK(chooseDistribution)
+
+def showDensityFunctionArticleComparison(evalutions, chooseDistribution):
+    viewLimits = getViewLimits(chooseDistribution)
+    showFunction = ShowFunction(getTeoreticalFunction(chooseDistribution),
+                                evalutions,
+                                parametrs,
+                                viewLimits)
+    showFunction.ShowFunctionArticleComparison(chooseDistribution)

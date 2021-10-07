@@ -17,7 +17,7 @@ class ShowFunction(object):
 
     def  showFunction(self, chooseDistribution):
         
-        labstr = self.getLable(chooseDistribution.current())
+        labstr = self.getLable(chooseDistribution)
         plt.figure()
         plt.grid()
         plt.plot(self.scopeOfView, self.fTeor, linestyle = '--', linewidth = 2, color = 'black', label=labstr)
@@ -25,8 +25,8 @@ class ShowFunction(object):
         plt.legend()
         plt.show()
 
-    def  ShowFunctionArticle(self, chooseDistribution):
-        labstr = self.getLable(chooseDistribution.current())
+    def  ShowFunctionArticleN(self, chooseDistribution):
+        labstr = self.getLable(chooseDistribution)
         plt.figure()
         plt.grid()
         plt.plot(self.scopeOfView, self.fTeor, linestyle = 'solid', color = 'black', label='$\it{N(0,1)}$')
@@ -36,8 +36,19 @@ class ShowFunction(object):
         plt.legend()
         plt.show()
     
+    def  ShowFunctionArticleK(self, chooseDistribution):
+        labstr = self.getLable(chooseDistribution)
+        plt.figure()
+        plt.grid()
+        plt.plot(self.scopeOfView, self.fTeor, linestyle = 'solid', color = 'black', label='$\it{N(0,1)}$')
+        plt.plot(self.scopeOfView, self.F[0], linestyle = 'dashed', label = '$\it{f(x), K=6}$')
+        plt.plot(self.scopeOfView, self.F[1], linestyle = 'dashdot', label = '$\it{f(x), N=10}$')
+        plt.plot(self.scopeOfView, self.F[2], linestyle = 'dotted', label = '$\it{f(x), N=15}$')
+        plt.legend()
+        plt.show()
+    
     def ShowFunctionArticleComparison(self, chooseDistribution):
-        labstr = self.getLable(chooseDistribution.current())
+        labstr = self.getLable(chooseDistribution)
         plt.figure()
         plt.grid()
         plt.plot(self.scopeOfView, self.fTeor, linestyle = 'solid', color = 'black', label='$\it{N(0,1)}$')

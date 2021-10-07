@@ -15,11 +15,11 @@ class RandomVariables(object):
         # self.beta = self.betaRandom()
 
     def getFunction(self, chooseDistribution):
-        if chooseDistribution.current() == 0:
+        if chooseDistribution == 0:
             return self.normal()
-        elif chooseDistribution.current() == 1:
+        elif chooseDistribution == 1:
             return self.exponential()
-        elif chooseDistribution.current() == 2:
+        elif chooseDistribution == 2:
             return self.gamma()
 
     def normal(self):

@@ -22,11 +22,11 @@ class FourierTransform(object):
         self.randomVariablesFFT = [self.randomVariables[2*i] for i in range(int(len(self.randomVariables)/2))]
 
     def getEstmation(self, chooseModel):
-        if chooseModel.current() == 0:
+        if chooseModel == 0:
             return self.discreteFourierTransform()
-        elif chooseModel.current() == 1:
+        elif chooseModel == 1:
             return self.fastFourierTransform()
-        elif chooseModel.current() == 2:
+        elif chooseModel == 2:
             return self.windowFourierTransform()
             
     def discreteFourierTransform(self):
